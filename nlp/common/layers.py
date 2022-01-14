@@ -28,7 +28,7 @@ class Sigmoid:
         self.out = None
 
     def forward(self, x):
-        self.out = 1 / (1 - np.exp(x))
+        self.out = 1 / (1 + np.exp(-x))
 
         return self.out
 
@@ -73,7 +73,7 @@ class Affine:
     def backward(self, dout):
         W, b = self.params
 
-        dW = x.T @ dout
+        dW = self.x.T @ dout
         dx = dout @ W.T
         db = np.sum(dout, axis=0)
 
@@ -104,7 +104,7 @@ class SoftmaxWithLoss:
         self.y = None # softmax 의 출력
         self.t = None # 정답
     
-    def forward(self, x, y):
+    def forward(self, x, t):
         self.t = t
         self.y = softmax(x)
         
