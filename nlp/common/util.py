@@ -1,3 +1,4 @@
+from curses import window
 import sys
 sys.path.append('..')
 import os 
@@ -167,6 +168,65 @@ def ppmi(C, verbose=False, eps=1e-8):
     return M
 
 
+def create_context_target(corpus, window_size=1):
+    target = corpus[window_size:-window_size] # 양 옆끝을 제외하고 target value 생성 target의 길이는 항상 1
+    contexts = []
 
+    for idx in range(window_size, len(corpus)-window_size):
+        cs = []
+        for t in range(-window_size, window_size + 1):
+            if t == 0:
+                continue
+            cs.append(corpus[idx+t])
+        contexts.append(cs)
 
+    return np.array(contexts), np.array(target)
+
+def convert_one_hot(corpus, vocab_size):
+    '''
+    원 핫으로 표현
+
+    Parameters
+    -----------
+    corpus : nd.array (N, C) or (N), N : 샘플 수 C: 맥락 수
+             1차원 => 샘플을 구성하는 맥락 수 == 1
+        단어 ID 목록 1차원 또는 2차원 배열
+    
+    vocab_size : int
+        어휘 수
+    
+    Returns
+    --------
+    one_hot : nd.array (N, C, vocab_size) or (N, vocab_size)
+    원 핫 표현 2차원 또는 3차원 넘파이 배열
+    '''
+    N = corpus.shape[0]
+
+    if corpus.ndim == 1: # 샘플을 구성하는 맥락 수  (C) == 1
+        one_hot = np.zeros((N, vocab_size), dtype=np.int32) # 원핫 표현  N:샘플 수(문장 수)
+
+        for idx, word_id in enumerate(corpus):
+            one_hot[idx, word_id] = 1
+    
+    elif corpus.ndim == 2:
+        C = corpus.shape[1]
+        one_hot = np.zeros((N, C, vocab_size), dtype=np.int32)
+        for idx_0, word_ids in enumerate(corpus):
+            for idx_1, word_id in enumerate(word_ids):
+                one_hot[idx_0, idx_1, word_id] = 1
+    
+    return one_hot
+
+if __name__ == "__main__":
+    text = "You say goodbye and I say hello."
+    corpus, word_to_id, id_to_word = preprocess(text)
+
+    contexts, target = create_context_target(corpus, window_size=1)
+
+    vocab_size = len(word_to_id)
+    target = convert_one_hot(target, vocab_size)
+    contexts = convert_one_hot(contexts, vocab_size)
+
+    print(f"contexts: {contexts}")
+    print(f"target: {target}")
 
