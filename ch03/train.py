@@ -23,8 +23,6 @@ if __name__ == "__main__":
     optimizer = Adam()
     trainer = Trainer(model, optimizer)
 
-    trainer(model, optimizer)
-
     trainer.fit(contexts, target, max_epoch, batch_size)
     trainer.plot()
 
