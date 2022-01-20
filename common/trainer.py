@@ -45,10 +45,10 @@ class Trainer:
                 loss_count += 1
 
                 if (eval_interval is not None) and (iters % eval_interval) == 0:
-                    ppl = np.exp(total_loss / loss_count)
+                    avg_loss = total_loss / loss_count
                     elapsed_time = time.time() - start_time
-                    print(f'| epcoh {self.current_epoch + 1}, iters {iters + 1}/{max_iters} | time {elapsed_time} | ppl {ppl}')
-                    self.loss_list.append(float(ppl))
+                    print(f'| epcoh {self.current_epoch + 1}, iters {iters + 1}/{max_iters} | time {elapsed_time} | loss {avg_loss}')
+                    self.loss_list.append(float(avg_loss))
                     total_loss, loss_count = 0, 0
 
             self.current_epoch += 1
@@ -59,13 +59,14 @@ class Trainer:
             plt.ylim(*ylim)
         plt.plot(x, self.loss_list, label='train')
         plt.xlabel(f'iters (x {self.eval_interval})')
-        plt.ylabel('ppl')
+        plt.ylabel('loss')
         plt.show()
 
 def remove_duplicate(params, grads):
     """
     매개변수 배열 중 중복되는 가중치를 하나로 모아 그 가중치에 대응하는 기울기를 더한다.
     """
+    params, grads = params[:], grads[:]
 
     while True:
         find_fig = False

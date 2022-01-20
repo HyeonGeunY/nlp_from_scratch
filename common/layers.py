@@ -10,16 +10,18 @@ class MatMul:
         self.x = None
 
     def forward(self, x):
-        (W,) = self.params  # 언패킹 W, : 중요
+        W, = self.params  # 언패킹 W, : 중요
         self.x = x
         return self.x @ W
 
     def backward(self, dout):
-        (W,) = self.params
+        W, = self.params
         dx = dout @ W.T
         dw = self.x.T @ dout
         self.grads[0][...] = dw  # [...] : 메모리 위치 고정, 깊은 복사
         return dx  # 연쇄 법칙으로 넘겨주기 위한 값
+
+
 
 
 class Sigmoid:
@@ -125,7 +127,11 @@ class SoftmaxWithLoss:
         dx = dx / batch_size
         
         return dx
-    
+  
+
+
+
+
 class Dropout:
     def __init__(self, dropout_ratio=0.5):
         self.params, self.grads = [], []

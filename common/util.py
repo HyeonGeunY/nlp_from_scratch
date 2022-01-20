@@ -38,6 +38,7 @@ def preprocess(text):
     return corpus, word_to_id, id_to_word
 
 
+
 def create_co_matrix(corpus, vocab_size, window_size=1):
     """
     co-occurence matrix(동시 발생 행렬) 생성
@@ -182,6 +183,8 @@ def create_contexts_target(corpus, window_size=1):
 
     return np.array(contexts), np.array(target)
 
+
+
 def convert_one_hot(corpus, vocab_size):
     '''
     원 핫으로 표현
@@ -216,6 +219,7 @@ def convert_one_hot(corpus, vocab_size):
                 one_hot[idx_0, idx_1, word_id] = 1
     
     return one_hot
+
 
 if __name__ == "__main__":
     text = "You say goodbye and I say hello."
