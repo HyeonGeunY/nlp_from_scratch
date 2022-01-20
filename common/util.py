@@ -168,7 +168,7 @@ def ppmi(C, verbose=False, eps=1e-8):
     return M
 
 
-def create_context_target(corpus, window_size=1):
+def create_contexts_target(corpus, window_size=1):
     target = corpus[window_size:-window_size] # 양 옆끝을 제외하고 target value 생성 target의 길이는 항상 1
     contexts = []
 
