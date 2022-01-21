@@ -24,7 +24,7 @@ class SimpleCBOW:
             self.params += layer.params
             self.grads += layer.grads
         
-        self.word_vecs = W_in
+        self.word_vecs = W_in # 단어의 분산표현인 첫번쨰 가중치를 따로 저장
 
     def forward(self, contexts, target):
         h0 = self.in_layer0.forward(contexts[:, 0])
