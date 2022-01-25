@@ -127,10 +127,6 @@ class SoftmaxWithLoss:
         dx = dx / batch_size
         
         return dx
-  
-
-
-
 
 class Dropout:
     def __init__(self, dropout_ratio=0.5):
@@ -147,3 +143,27 @@ class Dropout:
         
     def backward(self, dout):
         return dout * self.mask
+
+class Embedding:
+    def __init__(self, W):
+        self.params = [W]
+        self.grads = [np.zeros_like(W)]
+        self.idx = None
+
+    def forward(self, idx): # 특정 행(idx)의 가중치를 추출한 후 반환 (인풋이 원 핫 인코딩일 경우 내적과 같은 같은 동작 but cost 측면에서 유리)
+        W, = self.params
+        self.idx = idx
+        out = W[idx]
+        return out
+
+    def backward(self, dout):
+        dW, = self.grads
+        dW[...] = 0 
+        np.add.at(dW, self.idx, dout) # dout을 dW의 self.idx 행에 더함
+        
+        # or 
+        # for i, word_id in enumerate(self.idx):
+        #     dW[word_id] += dout[i] 
+        return None
+
+
