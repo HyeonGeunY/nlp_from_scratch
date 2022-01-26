@@ -99,6 +99,7 @@ class Softmax:
         sumdx = np.sum(dx, axis=1, keepdims=True)
         dx -= sumdx * self.out
         return dx
+   
     
 class SoftmaxWithLoss:
     def __init__(self):
@@ -128,6 +129,7 @@ class SoftmaxWithLoss:
         
         return dx
 
+
 class Dropout:
     def __init__(self, dropout_ratio=0.5):
         self.params, self.grads = [], []
@@ -143,6 +145,7 @@ class Dropout:
         
     def backward(self, dout):
         return dout * self.mask
+        
 
 class Embedding:
     def __init__(self, W):
