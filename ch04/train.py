@@ -7,7 +7,6 @@ import pickle
 from common.trainer import Trainer
 from common.optimizer import Adam
 from cbow import CBOW
-#from sk
 from common.util import create_contexts_target, to_cpu, to_gpu
 from dataset import ptb
 
@@ -27,6 +26,9 @@ if __name__ == "__main__":
     model = CBOW(vocab_size, HIDDEN_SIZE, WINDOW_SIZE, corpus)
     optimizer = Adam()
     trainer = Trainer(model, optimizer)
+    
+    trainer.fit(contexts, target, MAX_EPOCH, BATCH_SIZE)
+    trainer.plot()
 
     word_vecs = model.word_vecs
     if config.GPU:
@@ -39,5 +41,7 @@ if __name__ == "__main__":
 
     with open(pkl_file, 'wb') as f:
         pickle.dump(params, f, -1)    
+        
+        
 
     

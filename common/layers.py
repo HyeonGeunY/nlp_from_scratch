@@ -45,7 +45,7 @@ class SigmoidWithLoss: # ??
         self.y = None
         self.x = None
         
-    def forward(self, x, y):
+    def forward(self, x, t):
         self.t = t
         self.y = 1 / (1 + np.exp(-x))
         

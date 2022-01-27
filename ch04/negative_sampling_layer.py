@@ -50,7 +50,7 @@ class UnigramSampler:
         self.vocab_size = vocab_size
 
         self.word_p = np.zeros(vocab_size)
-        for i in range(vocab_size):mk
+        for i in range(vocab_size):
             self.word_p[i] = counts[i] 
         
         self.word_p = np.power(self.word_p, power)
@@ -63,7 +63,7 @@ class UnigramSampler:
             negative_sample = np.zeros((batch_size, self.sample_size), dtype=np.int32)
 
             for i in range(batch_size):
-                p = self.word_p_copy()
+                p = self.word_p.copy()
                 target_idx = target[i]
                 p[target_idx] = 0
                 p /= p.sum()

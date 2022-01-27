@@ -23,7 +23,7 @@ class CBOW:
         self.params, self.grads = [], []
         for layer in layers:
             self.params += layer.params
-            self.grads += layers.grads
+            self.grads += layer.grads
 
         self.word_vecs = W_in
         

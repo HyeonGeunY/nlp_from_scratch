@@ -1,4 +1,3 @@
-from curses import window
 import sys
 sys.path.append('..')
 import os 
@@ -220,6 +219,17 @@ def convert_one_hot(corpus, vocab_size):
     
     return one_hot
 
+def to_cpu(x):
+    import numpy
+    if type(x) == numpy.ndarray:
+        return x
+    return np.asnumpy(x)
+
+def to_gpu(x):
+    import cupy
+    if type(x) == cupy.ndarray:
+        return x
+    return cupy.asarray(x)
 
 if __name__ == "__main__":
     text = "You say goodbye and I say hello."
@@ -234,3 +244,40 @@ if __name__ == "__main__":
     print(f"contexts: {contexts}")
     print(f"target: {target}")
 
+def analogy(a, b, c, word_to_id, id_to_word, word_matrix, top=5, answer=None):
+    for word in (a, b, c):
+        if word not in word_to_id:
+            print(f"{word}(을)를 찾을 수 없습니다.")
+            return
+        
+    print(f'\n[analogy] {a} : {b} = {c} : ?')
+    a_vec, b_vec, c_vec = word_matrix[word_to_id[a]], word_matrix[word_to_id[b]], word_matrix[word_to_id[c]]
+    query_vec = b_vec - a_vec + c_vec
+    query_vec = normalize(query_vec)
+    
+    similarity = np.dot(word_matrix, query_vec)
+    
+    if answer is not None:
+        print(f'==> {answer} : {str(np.dot(word_matrix[word_to_id[answer]], query_vec))}')
+        
+    count = 0
+    for i in (-1 * similarity).argsort():
+        if np.isnan(similarity[i]):
+            continue
+        if id_to_word[i] in (a, b, c):
+            continue
+        print(f"{id_to_word[i]}: {similarity[i]}")
+        
+        count += 1
+        if count >= top:
+            return
+        
+def normalize(x):
+    if x.ndim == 2:
+        s = np.sqrt((x * x).sum(1))
+        x /= s.reshape((s.shape[0], 1))
+    elif x.ndim == 1:
+        s = np.sqrt((x * x).sum())
+        x /= s
+    return x
+        
