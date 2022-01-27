@@ -50,7 +50,7 @@ class UnigramSampler:
         self.vocab_size = vocab_size
 
         self.word_p = np.zeros(vocab_size)
-        for i in range(vocab_size):
+        for i in range(vocab_size):mk
             self.word_p[i] = counts[i] 
         
         self.word_p = np.power(self.word_p, power)
