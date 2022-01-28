@@ -7,6 +7,7 @@ import pickle
 from common.trainer import Trainer
 from common.optimizer import Adam
 from cbow import CBOW
+from skip_gram import SkipGram
 from common.util import create_contexts_target, to_cpu, to_gpu
 from dataset import ptb
 
@@ -20,10 +21,12 @@ if __name__ == "__main__":
     vocab_size = len(word_to_id)
 
     contexts, target = create_contexts_target(corpus, WINDOW_SIZE)
+    
     if config.GPU:
         contexts, target = to_gpu(contexts), to_gpu(target)
 
-    model = CBOW(vocab_size, HIDDEN_SIZE, WINDOW_SIZE, corpus)
+    #model = CBOW(vocab_size, HIDDEN_SIZE, WINDOW_SIZE, corpus)
+    model = SkipGram(vocab_size, HIDDEN_SIZE, WINDOW_SIZE, corpus)
     optimizer = Adam()
     trainer = Trainer(model, optimizer)
     

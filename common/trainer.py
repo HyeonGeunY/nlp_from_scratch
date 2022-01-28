@@ -60,7 +60,8 @@ class Trainer:
         plt.plot(x, self.loss_list, label='train')
         plt.xlabel(f'iters (x {self.eval_interval})')
         plt.ylabel('loss')
-        plt.show()
+        #plt.show()
+        plt.savefig("plot")
 
 def remove_duplicate(params, grads):
     """
