@@ -43,6 +43,12 @@ class TimeRNN:
         self.stateful = stateful
     
     def forward(self, xs):
+        """
+        Parameters
+        -----------
+        xs : 
+            Time T개 분량의 input (N, T, D), N : batch_size, T : T개 분량의 시계열 데이터, D : 입력 벡터의 차원 수
+        """
         Wx, Wh, b = self.params
         N, T, D = xs.shape
         D, H = Wx.shape
@@ -89,7 +95,77 @@ class TimeRNN:
 
     def reset_state(self):
         self.h = None
+
+
+class TimeEmbedding:
+    def __init__(self, W):
+        self.params = [W]
+        self.grads = [np.zeros_like(W)]
+        self.layers = None
+        self.W = W
+
+    def forward(self, xs):
+        N, T = xs.shape
+        V, D = self.W.shape
+
+        out = np.empty((N, T, D), dtypes='f')
+        self.layers = []
+
+        for t in range(T):
+            layer = Embedding(self.W)
+            out[:, t, :] = layer.forward(xs[:, t])
+            self.layers.append(layer)
+
+        return out
+
+    def backward(self, dout):
+        N, T, D = dout.shape
+
+        grad = 0
+        for t in range(T):
+            layer = self.layers[t]
+            layer.backward(dout[:, t, :])
+            grad += layer.grad[0]
+            return None
+
+            
+class TimeAffine:
+    def __init__(self, W, b):
+        self.params =[W, b]
+        self.grads = [np.zeros_like(W), np.zero_like(b)]
+        self.x = None
     
+    def forward(self, x):
+        N, T, D = x.shape
+        W, b = self.params
+
+        rx = x.reshape(N*T, -1)
+        out = np.dot(rx, W) + b
+        self.x = x
+        return out.reshape(N, T, -1)
+
+    def backward(self, dout):
+        x = self.x
+        N, T, D = x.shape
+        W, b = self.params
+
+        dout = dout.reshape(N*T, -1)
+        rx = x.reshape(N*T, -1)
+
+        db = np.sum(dout, axis=0)
+        dW = np.dot(rx.T, dout)
+        dx = np.dot(dout, W.T)
+        dx = dx.reshape(*x.shape)
+
+        self.grads[0][...] = dW
+        self.grads[1][...] = db
+
+        return dx
+
+
+
+
+
         
 
 
