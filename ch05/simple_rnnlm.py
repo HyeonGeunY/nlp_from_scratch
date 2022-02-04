@@ -30,7 +30,7 @@ class SimpleRnnlm:
         self.params, self.grads = [], []
         for layer in self.layers:
             self.params += layer.params
-            self.grads += self.grads
+            self.grads += layer.grads
 
     def forward(self, xs, ts):
         for layer in self.layers:
