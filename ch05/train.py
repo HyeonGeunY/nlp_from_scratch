@@ -3,7 +3,7 @@ sys.path.append('..')
 import matplotlib.pyplot as plt
 import numpy as np
 from common.optimizer import SGD
-from common.trainer import RnnlmTrainer
+from common.trainer import RNNlmTrainer
 from dataset import ptb
 from simple_rnnlm import SimpleRnnlm
 
@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     model = SimpleRnnlm(vocab_size, wordvec_size, hidden_size)
     optimizer = SGD(lr)
-    trainer = RnnlmTrainer(model, optimizer)
+    trainer = RNNlmTrainer(model, optimizer)
 
     trainer.fit(xs, ts, max_epoch, batch_size, time_size)
     trainer.plot()
