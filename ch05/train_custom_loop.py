@@ -13,7 +13,7 @@ if __name__ == "__main__":
     hidden_size = 100 # RNN 은닉 상태 백터의 원소 수
     time_size = 5
     lr = 0.1
-    max_epoch= 100
+    max_epoch = 400
 
     # 학습 데이터 읽기 (1000개의 단어)
     corpus, word_to_id, id_to_word = ptb.load_data('train')

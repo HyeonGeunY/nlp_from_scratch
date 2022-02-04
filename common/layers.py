@@ -24,40 +24,7 @@ class MatMul:
 
 
 
-class Sigmoid:
-    def __init__(self):
-        self.params, self.grads = [], []
-        self.out = None
 
-    def forward(self, x):
-        self.out = 1 / (1 + np.exp(-x))
-
-        return self.out
-
-    def backward(self, dout):
-        dx = dout * self.out * (1.0 - self.out)
-        return dx
-    
-class SigmoidWithLoss: # ??
-    def __init__(self):
-        self.params, self.grads = [], []
-        self.loss = None
-        self.y = None
-        self.x = None
-        
-    def forward(self, x, t):
-        self.t = t
-        self.y = 1 / (1 + np.exp(-x))
-        
-        self.loss = cross_entropy_error(np.c_[1 - self.y, self.y], self.t)
-        
-        return self.loss
-    
-    def backward(self, dout=1):
-        batch_size = self.t.shape[0]
-        
-        dx = (self.y - self.t) * dout / batch_size
-        return dx
 
 
 class Affine:
@@ -130,14 +97,48 @@ class SoftmaxWithLoss:
         return dx
 
 
+class Sigmoid:
+    def __init__(self):
+        self.params, self.grads = [], []
+        self.out = None
+
+    def forward(self, x):
+        self.out = 1 / (1 + np.exp(-x))
+
+        return self.out
+
+    def backward(self, dout):
+        dx = dout * self.out * (1.0 - self.out)
+        return dx
+    
+class SigmoidWithLoss: # ??
+    def __init__(self):
+        self.params, self.grads = [], []
+        self.loss = None
+        self.y = None
+        self.t = None
+        
+    def forward(self, x, t):
+        self.t = t
+        self.y = 1 / (1 + np.exp(-x))
+        
+        self.loss = cross_entropy_error(np.c_[1 - self.y, self.y], self.t)
+        
+        return self.loss
+    
+    def backward(self, dout=1):
+        batch_size = self.t.shape[0]
+        
+        dx = (self.y - self.t) * dout / batch_size
+        return dx
 class Dropout:
     def __init__(self, dropout_ratio=0.5):
         self.params, self.grads = [], []
         self.dropout_ratio = dropout_ratio
         self.mask = None
         
-    def forward(self, x, train_fig=True):
-        if train_fig:
+    def forward(self, x, train_flg=True):
+        if train_flg:
             self.mask = np.random.random(*x.shape) > self.dropout_ratio
             return x * self.mask
         else:
