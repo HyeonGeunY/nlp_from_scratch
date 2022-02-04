@@ -126,12 +126,13 @@ class TimeEmbedding:
             layer = self.layers[t]
             layer.backward(dout[:, t, :])
             grad += layer.grads[0]
-            return None
+        self.grads[0][...] = grad
+        return None
 
 
 class TimeAffine:
     def __init__(self, W, b):
-        self.params =[W, b]
+        self.params = [W, b]
         self.grads = [np.zeros_like(W), np.zeros_like(b)]
         self.x = None
     
@@ -165,7 +166,7 @@ class TimeAffine:
 class TimeSoftmaxWithLoss:
     def __init__(self):
         self.params, self.grads = [], []
-        self.cache  = None
+        self.cache = None
         self.ignore_label = -1
 
     def forward(self, xs, ts):

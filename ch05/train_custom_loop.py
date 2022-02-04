@@ -60,7 +60,7 @@ if __name__ == "__main__":
         ppl_list.append(float(ppl))
         total_loss, loss_count = 0, 0
 
-    x = np.range(len(ppl_list))
+    x = np.arange(len(ppl_list))
     plt.plot(x, ppl_list, label="train")
     plt.xlabel('epochs')
     plt.ylabel('perplexity')
