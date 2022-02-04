@@ -29,3 +29,4 @@ if __name__ == "__main__":
 
     trainer.fit(xs, ts, max_epoch, batch_size, time_size)
     trainer.plot()
+    plt.savefig("result_by_trainer")
