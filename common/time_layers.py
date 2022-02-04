@@ -84,7 +84,7 @@ class TimeRNN:
             for i, grad in enumerate(layer.grads):
                 grads[i] += grad
         
-        for i, grad in enumerate(layer.grads):
+        for i, grad in enumerate(grads):
             self.grads[i][...] = grad # 실제로는 같은 가중치를 갖는 RNN층을 상태 t에 대해서 반복 -> ~t 상태까지의 grads 누적한다. 
         self.dh = dh
 
