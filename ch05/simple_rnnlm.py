@@ -19,7 +19,7 @@ class SimpleRnnlm:
         # 계층 생성
         self.layers = [
             TimeEmbedding(embed_W),
-            TimeAffine(rnn_Wx, rnn_Wh, rnn_b, stateful=True),
+            TimeRNN(rnn_Wx, rnn_Wh, rnn_b, stateful=True),
             TimeAffine(affine_W, affine_b)
         ]
 

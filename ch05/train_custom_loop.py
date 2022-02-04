@@ -1,6 +1,6 @@
 from gettext import npgettext
 import sys
-sys.path.join('..')
+sys.path.append('..')
 import matplotlib.pyplot as plt
 import numpy as np
 from common.optimizer import SGD

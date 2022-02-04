@@ -108,7 +108,7 @@ class TimeEmbedding:
         N, T = xs.shape
         V, D = self.W.shape
 
-        out = np.empty((N, T, D), dtypes='f')
+        out = np.empty((N, T, D), dtype='f')
         self.layers = []
 
         for t in range(T):
@@ -125,14 +125,14 @@ class TimeEmbedding:
         for t in range(T):
             layer = self.layers[t]
             layer.backward(dout[:, t, :])
-            grad += layer.grad[0]
+            grad += layer.grads[0]
             return None
 
 
 class TimeAffine:
     def __init__(self, W, b):
         self.params =[W, b]
-        self.grads = [np.zeros_like(W), np.zero_like(b)]
+        self.grads = [np.zeros_like(W), np.zeros_like(b)]
         self.x = None
     
     def forward(self, x):
