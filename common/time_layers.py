@@ -290,11 +290,11 @@ class TimeLSTM:
         H = Wh.shape[0]
 
         self.layers = []
-        hs = np.empty((N, T, H), dtyes='f')
+        hs = np.empty((N, T, H), dtype='f')
 
         if not self.stateful or self.h is None:
-            self.h = np.zeros((N, H), dtypes='f')
-        if not self.statefule or self.c is None:
+            self.h = np.zeros((N, H), dtype='f')
+        if not self.stateful or self.c is None:
             self.c = np.zeros((N, H), dtype='f')
         
         for t in range(T):
@@ -311,7 +311,7 @@ class TimeLSTM:
         N, T, H = dhs.shape
         D = Wx.shape[0]
 
-        dxs = np.empty((N, T, D), dtypes='f')
+        dxs = np.empty((N, T, D), dtype='f')
         dh, dc = 0, 0
 
         grads = [0, 0, 0]
@@ -334,6 +334,25 @@ class TimeLSTM:
         self.h, self.c = None, None
 
 
+class TimeDropout:
+    def __init__(self, dropout_ratio=0.5):
+        self.params, self.grads = [], []
+        self.dropout_ratio = dropout_ratio
+        self.mask = None
+        self.train_fig = True
+        
+    def forward(self, xs):
+        if self.train_fig:
+            flg = np.random.rand(*xs.shape) > self.dropout_ratio
+            scale = 1 / (1.0 - self.dropout_ratio)
+            self.mask = flg.astype(np.float32) * scale
+            return xs * self.mask
+        else:
+            return xs
+
+    def backward(self, dout):
+        return dout * self.mask
+            
 
 
 
