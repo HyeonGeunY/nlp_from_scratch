@@ -5,7 +5,7 @@ from common.optimizer import SGD
 from common.trainer import RNNlmTrainer
 from common.util import eval_perplexity, to_gpu
 from dataset import ptb
-from train_better_rnnlm import BetterRnnlm
+from better_rnnlm import BetterRnnlm
 
 if __name__ == "__main__":
     batch_size = 20
@@ -31,5 +31,29 @@ if __name__ == "__main__":
     ts = corpus[1:]
         
     model = BetterRnnlm(vocab_size, wordvec_size, hidden_size, dropout)
+    optimizer = SGD(lr)
+    trainer = RNNlmTrainer(model, optimizer)
+    
+    best_ppl = float('inf')
+    for epoch in range(max_epoch):
+        trainer.fit(xs, ts, max_epoch=1, batch_size=batch_size, max_grad=max_grad)
+        
+        model.reset_state()
+        ppl = eval_perplexity(model, corpus_val)
+        print(f"검증 퍼플렉서티: {ppl}")
+        
+        if best_ppl > ppl:
+            best_ppl = ppl
+            model.save_params()
+        else:
+            lr /= 4.0
+            optimizer.lr = lr
+        
+        model.reset_state()
+        print('-' * 50)
+    
+    model.reset_state()
+    ppl_test = eval_perplexity(model, corpus_test)
+    print(f"테스트 퍼플렉서티: {ppl_test}")
     
     
