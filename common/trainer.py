@@ -137,7 +137,7 @@ class RNNlmTrainer:
         if ylim is not None:
             plt.ylim(*ylim)
         plt.plot(x, self.ppl_list, label="train")
-        plt.xlabel("iter (x + {str(self.eval_interval)})")
+        plt.xlabel(f"iter (x + {str(self.eval_interval)})")
         plt.ylabel("ppl")
         plt.savefig("ppl")
 
