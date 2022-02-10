@@ -1,5 +1,7 @@
-import numpy as np
-
+from common.np import *
+from common.config import GPU
+from common.np import *
+from common.config import GPU
 from common.functions import softmax, cross_entropy_error
 
 
@@ -163,11 +165,11 @@ class Embedding:
     def backward(self, dout):
         dW, = self.grads
         dW[...] = 0 
-        np.add.at(dW, self.idx, dout) # dout을 dW의 self.idx 행에 더함
+        #np.add.at(dW, self.idx, dout) # dout을 dW의 self.idx 행에 더함
         
         # or 
-        # for i, word_id in enumerate(self.idx):
-        #     dW[word_id] += dout[i] 
+        for i, word_id in enumerate(self.idx):
+            dW[word_id] += dout[i] 
         return None
 
 

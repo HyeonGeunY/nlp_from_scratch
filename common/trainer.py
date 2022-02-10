@@ -1,10 +1,7 @@
-from pickletools import optimize
-from re import L
 import sys
 from typing import Optional
 
 sys.path.append("..")
-import numpy as np
 import time
 import matplotlib.pyplot as plt
 
