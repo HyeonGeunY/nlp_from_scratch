@@ -69,7 +69,7 @@ class Decoder:
     def backward(self, dscore):
         dout = self.affine.backward(dscore)
         dout = self.lstm.backward(dout)
-        dout - self.embed.backward(dout)
+        dout = self.embed.backward(dout)
         dh = self.lstm.dh
         return dh
     
@@ -110,13 +110,13 @@ class Seq2seq(BaseModel):
     
     def backward(self, dout=1):
         dout = self.softmax.backward(dout)
-        dh = self.decoder.forward(dout)
-        dout = self.encoder(dh)
+        dh = self.decoder.backward(dout)
+        dout = self.encoder.backward(dh)
         return dout
 
     def generate(self, xs, start_id, sample_size):
         h = self.encoder.forward(xs)
-        sampled = self.decoder.generate(h, start_id, sampled_size)
+        sampled = self.decoder.generate(h, start_id, sample_size)
         return sampled
         
 
