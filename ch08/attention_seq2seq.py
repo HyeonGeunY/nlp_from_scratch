@@ -74,7 +74,7 @@ class AttentionDecoder:
         self.lstm.set_state(h)
         
         for _ in range(sample_size):
-            x = np.arary([sample_id]).reshape((1, 1))
+            x = np.array([sample_id]).reshape((1, 1))
             
             out = self.embed.forward(x)
             dec_hs = self.lstm.forward(out)

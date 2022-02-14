@@ -1,7 +1,7 @@
 import sys
 sys.path.append('..')
 from common.np import *
-from common.np import Softmax
+from common.layers import Softmax
 
 
 class WeightSum:
@@ -9,7 +9,7 @@ class WeightSum:
         self.params, self.grads = [], []
         self.cache = None
     
-    def forward(self, hs, ts):
+    def forward(self, hs, a):
         N, T, H = hs.shape
         
         ar = a.reshape(N, T, 1) # .reshape(T, axis=1) # if not using broadcasting
@@ -36,7 +36,7 @@ class AttentionWeight:
         self.softmax = Softmax()
         self.cache = None
     
-    def forward(self, hs, a):
+    def forward(self, hs, h):
         N, T, H = hs.shape
         
         hr = h.reshape(N, 1, H) # .repeat(T, axis=1)
