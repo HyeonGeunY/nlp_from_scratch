@@ -1,4 +1,3 @@
-from ssl import HAS_TLSv1
 from common.np import *
 from common.layers import *
 from common.functions import sigmoid
